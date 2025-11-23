@@ -3,9 +3,8 @@ kind: Ingress
 metadata:
   name: mern-ingress
   namespace: online-store
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
   - host: mern.local
     http:
