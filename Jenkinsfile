@@ -36,7 +36,9 @@ pipeline{
         stage('Push to DockerHub'){
             steps{
                 script{
-                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    withCredentials([string(credentialsId: 'DOCKER_PASS', variable: 'DOCKER_PASS')]) {
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                    }
                     sh "docker push ${DOCKER_BACKEND}:${BUILD_NUMBER}"
                     sh "docker push ${DOCKER_FRONTEND}:${BUILD_NUMBER}"
                 }
