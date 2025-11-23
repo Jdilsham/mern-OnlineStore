@@ -55,5 +55,32 @@ pipeline{
                 }
             }
         }
+
+        stage('Deploy to minikube'){
+            steps{
+                sh """
+                    kubectl apply -f k8s/namespace.yaml
+                    kubectl apply -f k8s/mongo.yaml
+                    kubectl apply -f k8s/backend.yaml
+                    kubectl apply -f k8s/frontend.yaml
+                    kubectl apply -f k8s/ingress.yaml
+
+                    kubectl set image deployment/backend-deployment mern-backend=${DOCKER_BACKEND}:latest -n online-store
+                    kubectl set image deployment/frontend-deployment mern-frontend=${DOCKER_FRONTEND}:latest -n online-store
+                """
+            }
+        }
+
+        stage('Validate Deployment'){
+            steps{
+                sh """
+                    kubectl rollout status deployment/backend-deployment -n online-store --timeout=60s
+                    kubectl rollout status deployment/frontend-deployment -n online-store --timeout=60s
+                    kubectl rollout status deployment/mongo-deployment -n online-store --timeout=60s
+                    kubectl get pods -n online-store
+                """
+            }
+
+        }
     }
 }
