@@ -28,7 +28,7 @@ app.use(cors());
 app.use(express.json());
 //allows to parse user inputing json data to parse and insert to the database 
 
-app.use('/products',productRoutes);
+app.use('/api/products', productRoutes);
 
 app.listen(4000,()=>{
         dbConnect();
