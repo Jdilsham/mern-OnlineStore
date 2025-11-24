@@ -13,6 +13,11 @@ pipeline{
                 git branch: 'main', url: 'https://github.com/Jdilsham/mern-OnlineStore.git'
             }
         }
+        stage('Clear Docker Cache'){
+            steps{
+                sh "docker system prune -af"
+            }
+        }
 
         stage ('Build Backend Image'){
             steps{
