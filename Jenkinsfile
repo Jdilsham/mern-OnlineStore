@@ -16,11 +16,7 @@ pipeline{
 
         stage ('Build Backend Image'){
             steps{
-                dir('backend'){
-                    script{
-                        sh "docker build -t  ${DOCKER_BACKEND}:${BUILD_NUMBER} ."
-                    }
-                }
+                sh "docker build -t ${DOCKER_BACKEND}:${BUILD_NUMBER} backend"
             }
         }
         stage ('Build Frontend Image'){
