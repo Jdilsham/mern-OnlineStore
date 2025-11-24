@@ -10,6 +10,11 @@ const productModel = require('./models/products');
 
 const productRoutes=require('./routes/product');
 
+// Health check for Kubernetes
+app.get('/api/health', (req, res) => {
+    res.status(200).send("OK");
+});
+
 //let the server listen for the get method/ adding a route 
 app.get('/',(req,res)=>{
     res.send("HELLO! FROM THE SERVER");
@@ -26,8 +31,6 @@ app.use(express.json());
 app.use('/products',productRoutes);
 
 app.listen(4000,()=>{
-
-  
         dbConnect();
         console.log("SERVER IS STARTED");
 })
