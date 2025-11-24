@@ -18,19 +18,14 @@ export const useProductStore=create((set)=>({
                 }
         }
 
-        //find the relevand api endpoint to post json user data into the backend
-        const res=await fetch("http://localhost:4000/products",{
-                method:"POST", //to insert data
-                headers:{ //inserting data type
-                        "content-type":"application/json"
-                },
-                body:JSON.stringify(newProduct) //what we are inserting
-
-        }); 
-        /* res will contain the data that needs to be sent to the backend
-                like the waiter/api endpoint sending data from frontend to backend
-                waiter has this string of data 
-        */
+        // Use Ingress backend path
+        const res = await fetch("/api/products", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(newProduct)
+        });
 
       
 
@@ -52,28 +47,28 @@ export const useProductStore=create((set)=>({
 
        },
 
-       fetchProduct:async()=>{
-        const res=await fetch("http://localhost:4000/products");
-        const data=await res.json();
+        fetchProduct: async () => {
+                // Use Ingress backend path
+                const res = await fetch("/api/products");
+                const data = await res.json();
 
-        set({
-                products:data.data
-        });
-       },
-       deleteProduct:async(pid)=>{
+                set({
+                products: data.data
+                });
+        },
+        deleteProduct: async (pid) => {
+                // Use Ingress backend path
+                const res = await fetch(`/api/products/${pid}`, {
+                method: "DELETE"
+                });
 
-        const res=await fetch(`http://localhost:4000/products/${pid}`,{
-                method:"DELETE",   
-        });
+                const data = await res.json();
 
-        const data=await res.json();
-
-        if(!data.success){
-
+                if (!data.success) {
                 return {
-                        success:false,
-                        message:"DELETE OPERATION IS FAILED"
-                }
+                        success: false,
+                        message: "DELETE OPERATION FAILED"
+                };
         }
         
         set(state=>({
