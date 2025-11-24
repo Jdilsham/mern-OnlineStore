@@ -4,9 +4,8 @@ metadata:
   name: mern-ingress
   namespace: online-store
 spec:
-  ingressClassName: nginx
+  ingressClassName: gce
   rules:
-  - host: mern.local
     http:
       paths:
       - path: /

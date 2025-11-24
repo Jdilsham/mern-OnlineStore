@@ -4,6 +4,7 @@ metadata:
   name: mongo-pvc
   namespace: online-store
 spec:
+  storageClassName: standard-rwo
   accessModes:
     - ReadWriteOnce
   resources:

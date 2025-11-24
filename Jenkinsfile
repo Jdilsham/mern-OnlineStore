@@ -56,9 +56,13 @@ pipeline{
             }
         }
 
-        stage('Deploy to minikube'){
+        stage('Deploy to GKE'){
             steps{
                 sh """
+                    gcloud auth activate-service-account --key-file=/var/lib/jenkins/gcp-key.json
+                    gcloud config set project todo-478712
+                    gcloud container clusters get-credentials dev-cluster --zone asia-south1
+
                     kubectl apply -f k8s/namespace.yaml
                     kubectl apply -f k8s/mongo.yaml
                     kubectl apply -f k8s/backend.yaml
@@ -71,16 +75,5 @@ pipeline{
             }
         }
 
-        stage('Validate Deployment'){
-            steps{
-                sh """
-                    kubectl rollout status deployment/backend-deployment -n online-store --timeout=60s
-                    kubectl rollout status deployment/frontend-deployment -n online-store --timeout=60s
-                    kubectl rollout status deployment/mongo-deployment -n online-store --timeout=60s
-                    kubectl get pods -n online-store
-                """
-            }
-
-        }
     }
 }
